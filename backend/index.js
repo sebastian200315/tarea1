@@ -1,15 +1,12 @@
-const express = require('express');
-const app = express();
-const PORT = 8080;
+const express = require('express')
+const app = express()
+const port = 3000
 
-// Importar directamente el JSON
-const respuesta = require('./respuesta.json');
+app.get('/prueba', (req, res) => {
+  res.send('Hola Mundo!')
+})
 
-// Ruta /ping que responde con el contenido del JSON
-app.get('/ping', (req, res) => {
-    res.json(respuesta);
-});
 
-app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
