@@ -4,7 +4,7 @@ const app = express()
 
 app.use(cors());  // Usa la instancia 'app' para middleware
 
-const port = 3000
+const port = 8080
 
 app.get('/prueba', (req, res) => {
   res.send('Hola Mundo!')
