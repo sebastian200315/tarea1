@@ -11,7 +11,7 @@ COPY package.json ./
 RUN npm install
 
 # Copia el resto del código al contenedor
-COPY index.json .
+COPY index.js .
 
 # Expone el puerto en el que tu app escucha (ajústalo si usas otro)
 EXPOSE 8080
