@@ -1,5 +1,8 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
+
+app.use(cors());  // Usa la instancia 'app' para middleware
 
 const port = 3000
 
@@ -8,5 +11,5 @@ app.get('/prueba', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${port}`);
-});
+  console.log(`Servidor ejecutándose en http://localhost:${port}`)
+})
