@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copia los archivos de dependencias primero (para aprovechar la caché)
-COPY package.json ./
+COPY package.json .
 
 # Instala las dependencias
 RUN npm install
