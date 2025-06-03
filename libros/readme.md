@@ -1,57 +1,104 @@
-
 # 📚 API REST de Libros con Node.js y Express
 
-Este proyecto es una API RESTful hecha con Node.js y Express que permite gestionar una colección de libros en memoria: crear, leer, actualizar y eliminar libros (CRUD).
+Este proyecto es una API REST básica para la gestión de libros. Utiliza `Node.js` con `Express` y permite hacer operaciones CRUD (Crear, Leer, Actualizar y Eliminar).
 
 ---
 
-## 🚀 Tecnologías usadas
+## 🧰 Requisitos Previos
 
-- **Node.js**  
-- **Express.js**
+- Node.js (versión 14 o superior)
+- npm
+- **Docker** y **Docker Compose** instalados (para contenedores)
+- Un sistema operativo como **Ubuntu** (20.04 o superior recomendado)
 
 ---
 
-## 📦 Instalación y uso
+## 🚀 Instalación Manual (sin Docker)
 
-1. Clona el repositorio o copia el archivo:
+1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/api-libros-node.git
-   cd api-libros-node
+   git clone https://github.com/sebastian200315/tarea1.git 
+   cd libros
    ```
 
-2. Instala las dependencias:
+2. Instalar dependencias:
 
    ```bash
    npm install
    ```
 
-3. Ejecuta el servidor:
+3. Iniciar el servidor:
 
    ```bash
    node app.js
    ```
 
-4. Accede a la API en tu navegador o Postman:  
-   `http://localhost:8080`
+   El servidor estará corriendo en: [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## 📂 Endpoints disponibles
+## 🐳 Docker: Crear y Ejecutar en Ubuntu
 
-| Método | Endpoint           | Descripción                            |
-|--------|--------------------|----------------------------------------|
-| GET    | `/libros`          | Obtener todos los libros               |
-| GET    | `/libros?autor=x`  | Buscar libros por autor                |
-| GET    | `/libros/:id`      | Obtener un libro por ID                |
-| POST   | `/libros`          | Agregar un nuevo libro                 |
-| PUT    | `/libros/:id`      | Actualizar un libro existente          |
-| DELETE | `/libros/:id`      | Eliminar un libro por ID               |
+### 1️⃣ Crear el archivo `Dockerfile`
+
+Crea un archivo llamado `Dockerfile` en la raíz del proyecto con este contenido:
+
+```Dockerfile
+# Imagen base
+FROM node:18
+
+# Crear directorio de trabajo
+WORKDIR /usr/src/app
+
+# Copiar archivos necesarios
+COPY package*.json ./
+COPY app.js ./
+
+# Instalar dependencias
+RUN npm install
+
+# Exponer el puerto
+EXPOSE 8080
+
+# Comando para iniciar la app
+CMD [ "node", "app.js" ]
+```
+
+### 2️⃣ Crear y ejecutar el contenedor
+
+Desde la terminal en la carpeta del proyecto:
+
+#### a) Construir la imagen:
+
+```bash
+docker build -t api-libros .
+```
+
+#### b) Ejecutar el contenedor:
+
+```bash
+docker run -p 8080:8080 api-libros
+```
+
+¡Listo! Tu API estará disponible en: [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## 📥 Ejemplo JSON para POST /libros
+## 📚 Endpoints
+
+| Método | Ruta              | Función                             |
+|--------|-------------------|--------------------------------------|
+| GET    | `/libros`         | Listar todos los libros             |
+| GET    | `/libros/:id`     | Buscar libro por ID                 |
+| GET    | `/libros?autor=`  | Buscar libros por autor             |
+| POST   | `/libros`         | Crear un nuevo libro                |
+| PUT    | `/libros/:id`     | Actualizar un libro existente       |
+| DELETE | `/libros/:id`     | Eliminar un libro por su ID         |
+
+---
+
+## 📥 Ejemplo JSON para POST `/libros`
 
 ```json
 {
@@ -64,7 +111,7 @@ Este proyecto es una API RESTful hecha con Node.js y Express que permite gestion
 
 ---
 
-## 📁 Código completo (`app.js`)
+## 📁 Código completo (`index.js`)
 
 ```javascript
 const express = require('express');
@@ -97,7 +144,6 @@ let libros = [
   }
 ];
 
-// Obtener todos los libros o buscar por autor
 app.get('/libros', (req, res) => {
   const autor = req.query.autor;
   if (autor) {
@@ -112,7 +158,6 @@ app.get('/libros', (req, res) => {
   res.json(libros);
 });
 
-// Obtener libro por ID
 app.get('/libros/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const libro = libros.find(l => l.id === id);
@@ -123,7 +168,6 @@ app.get('/libros/:id', (req, res) => {
   }
 });
 
-// Crear nuevo libro
 app.post('/libros', (req, res) => {
   const { autor, titulo, descripcion, tipo } = req.body;
   if (!autor || !titulo || !descripcion || !tipo) {
@@ -140,7 +184,6 @@ app.post('/libros', (req, res) => {
   res.status(201).json(nuevoLibro);
 });
 
-// Actualizar libro por ID
 app.put('/libros/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const libro = libros.find(l => l.id === id);
@@ -155,7 +198,6 @@ app.put('/libros/:id', (req, res) => {
   res.json(libro);
 });
 
-// Eliminar libro por ID
 app.delete('/libros/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = libros.findIndex(l => l.id === id);
@@ -166,15 +208,17 @@ app.delete('/libros/:id', (req, res) => {
   res.json({ mensaje: "Libro eliminado correctamente" });
 });
 
-// Ruta base
 app.get('/', (req, res) => {
   res.send('📘 Bienvenido a la API de Libros con Express');
 });
 
-// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 ```
 
 ---
+
+## 👨‍💻 Autor
+
+Desarrollado por **Sebastián Cuyago**.
