@@ -31,7 +31,7 @@ Este proyecto es una API REST básica para la gestión de libros. Utiliza `Node.
 3. Iniciar el servidor:
 
    ```bash
-   node app.js
+   node index.js
    ```
 
    El servidor estará corriendo en: [http://localhost:8080](http://localhost:8080)
@@ -45,24 +45,26 @@ Este proyecto es una API REST básica para la gestión de libros. Utiliza `Node.
 Crea un archivo llamado `Dockerfile` en la raíz del proyecto con este contenido:
 
 ```Dockerfile
-# Imagen base
-FROM node:18
+# Usa una imagen oficial de Node.js como base
+FROM node:20.10.0-alpine3.18
 
-# Crear directorio de trabajo
-WORKDIR /usr/src/app
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Copiar archivos necesarios
-COPY package*.json ./
-COPY app.js ./
+# Copia los archivos de dependencias primero (para aprovechar la caché)
+COPY package.json .
 
-# Instalar dependencias
+# Instala las dependencias
 RUN npm install
 
-# Exponer el puerto
+# Copia el resto del código al contenedor
+COPY index.js .
+
+# Expone el puerto en el que tu app escucha (ajústalo si usas otro)
 EXPOSE 8080
 
-# Comando para iniciar la app
-CMD [ "node", "app.js" ]
+# Comando para ejecutar la app
+CMD ["node", "index.js"]
 ```
 
 ### 2️⃣ Crear y ejecutar el contenedor
